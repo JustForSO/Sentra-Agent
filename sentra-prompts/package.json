@@ -1,0 +1,41 @@
+{
+  "name": "sentra-prompts",
+  "version": "1.0.0",
+  "description": "动态系统提示词生成系统，支持占位符和函数动态解析",
+  "main": "sdk.js",
+  "type": "module",
+  "exports": {
+    ".": "./sdk.js",
+    "./sdk": "./sdk.js",
+    "./parser": "./parser.js",
+    "./config": "./config.js",
+    "./functions": "./functions/registry.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "prompt",
+    "dynamic",
+    "template",
+    "agent",
+    "placeholder",
+    "ai",
+    "llm",
+    "chatbot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "lunar-javascript": "^1.6.12",
+    "systeminformation": "^5.23.7",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

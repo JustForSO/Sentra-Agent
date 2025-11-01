@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "best": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "从0开始的候选计划索引，表示选择的最佳方案"
+    },
+    "reason": {
+      "type": "string",
+      "description": "选择该方案的简要理由（简洁扼要）"
+    },
+    "scores": {
+      "type": "object",
+      "description": "可选：各评估维度的0-1分值（越高越好）",
+      "properties": {
+        "executability": { "type": "number", "minimum": 0, "maximum": 1, "description": "可执行性/可落地性" },
+        "robustness": { "type": "number", "minimum": 0, "maximum": 1, "description": "稳健性/出错可恢复" },
+        "goal_fit": { "type": "number", "minimum": 0, "maximum": 1, "description": "与目标的契合度" },
+        "minimality": { "type": "number", "minimum": 0, "maximum": 1, "description": "最小充分性（无冗余步骤）" },
+        "dependency_clarity": { "type": "number", "minimum": 0, "maximum": 1, "description": "依赖/并行关系清晰度" },
+        "efficiency": { "type": "number", "minimum": 0, "maximum": 1, "description": "效率（更少步骤/更低成本/更低延迟）" }
+      },
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": "string",
+      "description": "可选：补充备注，如权衡因素/平分情况下的选择依据"
+    }
+  },
+  "required": ["best"],
+  "additionalProperties": true
+}

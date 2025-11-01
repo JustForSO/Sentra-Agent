@@ -1,0 +1,61 @@
+{
+  "name": "realtime_search",
+  "description": "Real-time web search, it enables instant access to the latest information available on the internet, helping users quickly discover, verify, and explore relevant data on any topic",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "query": { "type": "string", "description": "Search query, please use chinese usually." },
+      "max_results": { "type": "integer", "minimum": 1, "maximum": 20, "default": 5 },
+      "include_domains": {
+        "oneOf": [
+          { "type": "array", "items": { "type": "string" } },
+          { "type": "string" }
+        ],
+        "description": "Restrict results to these domains (array or comma-separated string)."
+      },
+      "exclude_domains": {
+        "oneOf": [
+          { "type": "array", "items": { "type": "string" } },
+          { "type": "string" }
+        ],
+        "description": "Exclude results from these domains (array or comma-separated string)."
+      },
+      "rawRequest": { "type": "object", "description": "Direct chat completions payload (standard OpenAI format with model and messages); model is enforced from plugin .env." },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "additionalProperties": true
+  },
+  "cooldownMs": 0,
+  "timeoutMs": 70000,
+  "meta": {
+    "realWorldAction": "上网搜索资料",
+    "responseStyle": "自然语言 + 引用链接(可选, markdown)",
+    "responseExample": "为问题提供简明答案，如果用户需要，则指出参考链接, 使用markdown的形式来展示链接"
+  }
+}

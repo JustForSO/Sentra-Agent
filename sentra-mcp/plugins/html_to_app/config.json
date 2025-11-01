@@ -1,0 +1,69 @@
+{
+  "name": "html_to_app",
+  "description": "将 HTML 代码或应用需求描述转换为完整的桌面应用项目（基于 Electron），支持原生 HTML、React、Vue 等框架。自动生成项目结构、依赖配置、打包脚本，可直接运行和打包为 exe/dmg/AppImage。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string",
+        "description": "应用描述或需求（必填）。可以是功能描述、UI 要求、业务逻辑等，插件会根据描述生成完整应用代码。"
+      },
+      "app_name": {
+        "type": "string",
+        "description": "应用名称（英文，用于生成项目文件夹和 package.json）"
+      },
+      "details": {
+        "type": "string",
+        "description": "细节补充要求（必填）。具体的 UI/UX 细节，如：背景图片、颜色方案、字体、图标、动画效果、布局细节等。越详细越好。"
+      },
+      "html_content": {
+        "type": "string",
+        "description": "可选：已有的 HTML 代码。如果提供，将作为应用的主要界面。"
+      },
+      "framework": {
+        "type": "string",
+        "description": "可选：前端框架 - vanilla(原生HTML) | react(React+Vite) | vue(Vue3+Vite)，默认 vanilla"
+      },
+      "features": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "可选：需要的功能特性，如：['文件读写', '系统托盘', '自动更新', '数据库']"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": ["description", "app_name", "details"],
+    "additionalProperties": true
+  },
+  "timeoutMs": 600000,
+  "meta": {
+    "realWorldAction": "生成桌面应用项目",
+    "responseStyle": "纯文本（项目路径 + 说明）",
+    "responseExample": "已生成项目：E:/sentra-agent/sentra-mcp/artifacts/apps/my-app\n\n运行命令：\ncd artifacts/apps/my-app\nnpm install\nnpm start\n\n打包命令：\nnpm run build"
+  }
+}

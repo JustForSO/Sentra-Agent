@@ -1,0 +1,76 @@
+{
+  "name": "weather",
+  "description": "全面的天气查询服务，支持使用城市名称查询天气，智能缓存城市ID和天气数据。Comprehensive weather service using city names with smart caching for city IDs and weather data.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "city": {
+        "type": "string",
+        "description": "城市名称，如：北京、上海、广州、深圳、杭州等。支持中文和拼音。City name in Chinese or Pinyin, e.g., Beijing, Shanghai, Guangzhou"
+      },
+      "queryType": {
+        "type": "string",
+        "enum": [
+          "current",
+          "hourly",
+          "forecast",
+          "warning",
+          "all"
+        ],
+        "default": "all",
+        "description": "查询类型：current(当前天气)、hourly(24小时预报)、forecast(7天预报)、warning(预警)、all(全部信息)"
+      },
+      "lang": {
+        "type": "string",
+        "default": "zh",
+        "description": "语言，默认 zh（中文）"
+      },
+      "unit": {
+        "type": "string",
+        "enum": [
+          "m",
+          "i"
+        ],
+        "default": "m",
+        "description": "单位制：m(公制)、i(英制)"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "city"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 12000,
+  "meta": {
+    "realWorldAction": "查看天气预报",
+    "responseStyle": "自然语言描述",
+    "responseExample": "今天北京晴转多云，气温15-25℃，空气质量良好"
+  }
+}

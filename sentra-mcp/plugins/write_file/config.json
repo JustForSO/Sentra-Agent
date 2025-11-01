@@ -1,0 +1,73 @@
+{
+  "name": "write_file",
+  "description": "Advanced file writing plugin supporting multiple formats: text, JSON, Excel (xlsx), Word (docx), PDF, CSV, ZIP and more. Auto-creates parent directories and supports overwrite control.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "文件路径，相对路径基于 baseDir，绝对路径直接写入。文件格式由扩展名自动检测：.xlsx/.docx/.pdf/.csv/.zip/.json/.txt 等。"
+      },
+      "content": {
+        "description": "文件内容，格式根据文件类型而定：\n- 文本/JSON: string 或 object\n- Excel: [[row1], [row2]] 或 { sheets: [{ name, data: [[]] }] }\n- Word: string 或 { paragraphs: [...] }\n- PDF: string 或 { title, content, footer }\n- CSV: [[]] 或 { headers, records }\n- ZIP: { files: [{ name, content/path }] } 或 { directory: '/path' }\n- 二进制: Buffer 或 base64 string"
+      },
+      "baseDir": {
+        "type": "string",
+        "default": "artifacts",
+        "description": "基础输出目录（默认 artifacts）。相对路径将基于此目录解析，绝对路径将直接写入。也可通过插件 .env 的 WRITE_FILE_BASE_DIR 覆盖。"
+      },
+      "encoding": {
+        "type": "string",
+        "default": "utf-8",
+        "description": "编码格式，支持 utf-8、base64 等。base64 用于二进制数据。"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": true,
+        "description": "是否覆盖已存在的文件。默认 true。"
+      },
+      "fileType": {
+        "type": "string",
+        "description": "手动指定文件类型，覆盖自动检测。支持：text, json, excel, word, pdf, csv, zip, binary。通常无需指定，由文件扩展名自动检测。"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "path",
+      "content"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 120000,
+  "meta": {
+    "realWorldAction": "操作电脑文件，支持发送文件给用户",
+    "responseStyle": "markdown结合自然语言(如果需要输出文件路径必须反馈文件路径给用户，否则自然语言即可)",
+    "responseExample": "如果涉及文件路径，比如使用write_file发送文件，那么需要反馈绝对路径，例如：![快乐源泉.docx](E:/sentra-agent/sentra-mcp/artifacts/topic_happy.docx)"
+  }
+}

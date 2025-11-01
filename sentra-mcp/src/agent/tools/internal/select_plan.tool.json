@@ -1,0 +1,10 @@
+{
+  "type": "function",
+  "function": {
+    "name": "select_plan",
+    "description": "从多份候选计划中选出最佳方案并说明理由。评估维度：executability(可执行性)、robustness(稳健性)、goal_fit(契合度)、minimality(最小充分性)、dependency_clarity(依赖清晰度)、efficiency(效率)。如可，请在输出中附带 scores(0-1) 与简短 notes。",
+    "parameters": {
+      "$ref": "./select_plan.schema.json"
+    }
+  }
+}

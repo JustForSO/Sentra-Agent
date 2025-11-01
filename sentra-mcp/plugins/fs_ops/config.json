@@ -1,0 +1,84 @@
+{
+  "name": "fs_ops",
+  "description": "File system utilities: read, append, delete, ensure_dir, list_dir, stat, move, copy. (write has been extracted to plugin: write_file)",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "read_file",
+          "append_file",
+          "delete_path",
+          "ensure_dir",
+          "list_dir",
+          "stat",
+          "move",
+          "copy",
+          "normalize_path"
+        ]
+      },
+      "path": {
+        "type": "string"
+      },
+      "dest": {
+        "type": "string"
+      },
+      "content": {},
+      "encoding": {
+        "type": "string",
+        "default": "utf-8"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": true
+      },
+      "recursive": {
+        "type": "boolean",
+        "default": false
+      },
+      "withContent": {
+        "type": "boolean",
+        "default": false
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "action",
+      "path"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 50000,
+  "meta": {
+    "realWorldAction": "操作电脑文件，支持发送文件给用户",
+    "responseStyle": "markdown结合自然语言(如果需要输出文件路径必须反馈文件路径给用户，否则自然语言即可)",
+    "responseExample": "如果涉及文件路径，比如使用write_file发送文件，那么需要反馈绝对路径，例如：![快乐源泉.docx](E:/sentra-agent/sentra-mcp/artifacts/topic_happy.docx)"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "zh": "上轮生成的参数无效或未解析到调用。请重新输出：\n{{required_line}}\n{{missing_line}}\n{{invalid_line}}\n\n【Schedule 修正规范】\n- 若涉及 schedule 字段，统一使用中文可解析格式：『N秒后』『N分钟后』『N小时后』『N天后』，或『YYYY-MM-DD HH:mm』/『YYYY-MM-DD HH:mm:ss』。\n- 禁止缩写：不要输出『5s后』『5min后』，请规范化为『5秒后』『5分钟后』。\n\n- 第 {{attempt}} 次尝试（最多 {{max_retries}} 次）",
+  "en": "Previous argument output was invalid or no call parsed. Please re-output:\n{{required_line}}\n{{missing_line}}\n{{invalid_line}}\n\n[Schedule normalization]\n- If 'schedule' is present, output in Chinese parseable forms: 'N秒后', 'N分钟后', 'N小时后', 'N天后', or 'YYYY-MM-DD HH:mm'/'YYYY-MM-DD HH:mm:ss'.\n- Do NOT use '5s', '5min'; normalize to '5秒后', '5分钟后'.\n\n- Attempt {{attempt}} (max {{max_retries}})"
+}

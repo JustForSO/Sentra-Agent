@@ -1,0 +1,57 @@
+{
+  "name": "av_transcribe",
+  "description": "音视频转文本：支持多种音视频格式（mp3/mp4/wav/amr等），输出转录文本和语言",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string",
+        "description": "音视频文件路径（必填）：本地绝对路径 或 http/https URL。格式：mp3/mp4/wav/amr/m4a/webm/flac/ogg 等"
+      },
+      "language": {
+        "type": "string",
+        "description": "音频语言（可选）：如 zh/en/ja/ko 等。不指定则自动检测"
+      },
+      "prompt": {
+        "type": "string",
+        "description": "提示文本（可选）：引导识别风格、纠正特定词汇"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "file"
+    ]
+  },
+  "timeoutMs": 180000,
+  "meta": {
+    "realWorldAction": "音视频转文本",
+    "responseStyle": "纯文本",
+    "responseExample": "纯文本"
+  }
+}

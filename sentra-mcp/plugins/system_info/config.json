@@ -1,0 +1,126 @@
+{
+  "name": "system_info",
+  "description": "Get comprehensive system information: OS, CPU, GPU, memory, disk, network, process, battery, USB, audio, display, BIOS, environment, users, services, software, temperature, Bluetooth, printers. Supports querying single or multiple categories simultaneously. Cross-platform (Windows/Linux/macOS).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "category": {
+        "type": "string",
+        "enum": [
+          "all",
+          "os",
+          "cpu",
+          "memory",
+          "gpu",
+          "disk",
+          "network",
+          "process",
+          "battery",
+          "usb",
+          "audio",
+          "display",
+          "bios",
+          "environment",
+          "users",
+          "services",
+          "software",
+          "temperature",
+          "bluetooth",
+          "printers"
+        ],
+        "description": "Single category to retrieve (deprecated, use 'categories' for multiple). Use 'all' for complete system overview."
+      },
+      "categories": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "all",
+            "os",
+            "cpu",
+            "memory",
+            "gpu",
+            "disk",
+            "network",
+            "process",
+            "battery",
+            "usb",
+            "audio",
+            "display",
+            "bios",
+            "environment",
+            "users",
+            "services",
+            "software",
+            "temperature",
+            "bluetooth",
+            "printers"
+          ]
+        },
+        "description": "Multiple categories to retrieve simultaneously (e.g., ['cpu', 'gpu', 'memory']). Overrides 'category' if provided."
+      },
+      "detailed": {
+        "type": "boolean",
+        "default": true,
+        "description": "Include detailed technical specifications and metrics."
+      },
+      "useCache": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable smart caching for system information (default: 7 days TTL)"
+      },
+      "cacheScope": {
+        "type": "string",
+        "enum": [
+          "memory",
+          "file",
+          "both"
+        ],
+        "default": "both",
+        "description": "Cache storage scope: memory-only, file-only, or both"
+      },
+      "cacheTTL": {
+        "type": "integer",
+        "minimum": 60,
+        "maximum": 2592000,
+        "default": 604800,
+        "description": "Cache time-to-live in seconds (default: 604800 = 7 days)"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "additionalProperties": true
+  },
+  "cooldownMs": 0,
+  "timeoutMs": 30000,
+  "meta": {
+    "realWorldAction": "查看电脑系统信息",
+    "responseStyle": "自然语言描述",
+    "responseExample": "系统是Windows 11 Pro 64位哦"
+  }
+}

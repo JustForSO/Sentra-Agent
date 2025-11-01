@@ -1,0 +1,10 @@
+{
+  "type": "function",
+  "function": {
+    "name": "emit_plan",
+    "description": "产出工具执行顺序的 JSON 计划。每一步仅包含一个工具(aiName)与draftArgs(仅需包含必填字段)。",
+    "parameters": {
+      "$ref": "./emit_plan.schema.json"
+    }
+  }
+}

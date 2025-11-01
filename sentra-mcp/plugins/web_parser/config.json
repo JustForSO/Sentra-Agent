@@ -1,0 +1,157 @@
+{
+  "name": "web_parser",
+  "description": "智能网页解析（优先 Puppeteer，可回退 axios），返回标题、正文与元数据。支持每插件独立 .env 配置与超时。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "description": "要解析的网页 URL（可不带协议，会自动补全为 https://）"
+      },
+      "use_js": {
+        "type": "boolean",
+        "description": "是否启用 JS 渲染（需要 puppeteer），默认取插件 .env 的 WEB_PARSER_ENABLE_JAVASCRIPT"
+      },
+      "waitSelector": {
+        "type": "string",
+        "description": "可选，等待该选择器出现后再提取内容（JS 渲染时有效）"
+      },
+      "maxBytes": {
+        "type": "integer",
+        "minimum": 1000,
+        "maximum": 2000000,
+        "default": 200000
+      },
+      "timeout": {
+        "type": "integer",
+        "minimum": 1000,
+        "maximum": 300000,
+        "description": "覆盖超时（毫秒），未提供则使用插件超时或全局超时"
+      },
+      "waitStrategy": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "network_idle",
+          "scroll",
+          "dom_stable"
+        ],
+        "description": "等待策略（默认 auto）"
+      },
+      "maxTotalWaitMs": {
+        "type": "integer",
+        "minimum": 500,
+        "maximum": 60000,
+        "description": "最大等待总时长（ms）"
+      },
+      "networkIdleMs": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 5000,
+        "description": "网络空闲判定空档（ms）"
+      },
+      "domStableSampleMs": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 5000,
+        "description": "DOM 稳定采样间隔（ms）"
+      },
+      "domStableSamples": {
+        "type": "integer",
+        "minimum": 2,
+        "maximum": 20,
+        "description": "DOM 稳定需要的连续采样次数"
+      },
+      "scrollSteps": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 50,
+        "description": "向下滚动步数（触发懒加载）"
+      },
+      "scrollStepPx": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 5000,
+        "description": "每步滚动像素"
+      },
+      "scrollDelayMs": {
+        "type": "integer",
+        "minimum": 10,
+        "maximum": 2000,
+        "description": "每步滚动延迟（ms）"
+      },
+      "loadingPatterns": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "description": "判定加载中的提示语（数组或逗号分隔字符串）"
+      },
+      "minGoodLen": {
+        "type": "integer",
+        "minimum": 50,
+        "maximum": 50000,
+        "description": "判定正文质量的最小长度阈值"
+      },
+      "blockTypes": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "description": "在渲染阶段要拦截的资源类型（例如 image,font,media,stylesheet 等）"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "additionalProperties": false
+  },
+  "cooldownMs": 0,
+  "timeoutMs": 35000,
+  "meta": {
+    "realWorldAction": "浏览网页内容",
+    "responseStyle": "自然语言 + 结构化内容",
+    "responseExample": "我已经查看了这个网页，内容主要是..."
+  }
+}

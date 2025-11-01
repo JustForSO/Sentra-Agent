@@ -1,0 +1,61 @@
+{
+  "name": "qq_account_setQQProfile",
+  "description": "QQ 平台：设置当前认证账号的个人资料（仅能修改自己的资料），支持更新昵称、个性签名与性别。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "nickname": {
+        "type": "string",
+        "description": "昵称"
+      },
+      "personal_note": {
+        "type": "string",
+        "description": "个性签名"
+      },
+      "sex": {
+        "type": "string",
+        "enum": [
+          "0",
+          "1",
+          "2"
+        ],
+        "description": "性别：0未知 1男 2女"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "timeoutMs": 20000,
+  "meta": {
+    "realWorldAction": "设置当前账号个人资料（仅修改自己的资料）",
+    "responseStyle": "自然语言（简洁）",
+    "responseExample": "已更新资料（昵称/个性签名/性别）"
+  }
+}

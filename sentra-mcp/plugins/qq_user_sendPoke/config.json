@@ -1,0 +1,69 @@
+{
+  "name": "qq_user_sendPoke",
+  "description": "QQ平台：发送戳一戳（私聊或群聊）",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "user_id": {
+        "type": "string",
+        "description": "接收戳一戳的用户QQ号（必填）"
+      },
+      "group_id": {
+        "type": "string",
+        "description": "群号（可选，不填则为私聊戳一戳）"
+      },
+      "target_id": {
+        "type": "string",
+        "description": "戳一戳的目标对象QQ号（可选，默认戳 user_id）"
+      },
+      "times": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5,
+        "default": 1,
+        "description": "戳一戳的次数（1-5次，默认1次）"
+      },
+      "requestId": {
+        "type": "string",
+        "description": "请求ID（可选，用于追踪）"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "user_id"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 20000,
+  "meta": {
+    "realWorldAction": "发送戳一戳",
+    "responseStyle": "自然语言（简洁）",
+    "responseExample": "已戳一戳对方"
+  }
+}

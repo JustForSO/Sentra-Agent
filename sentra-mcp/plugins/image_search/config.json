@@ -1,0 +1,49 @@
+{
+  "name": "image_search",
+  "description": "使用 Unsplash API 搜索高清图片并下载到本地。支持自动打包（图片数量超过阈值时压缩为 zip）。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "搜索关键词"
+      },
+      "count": {
+        "type": "integer",
+        "description": "需要搜索的图片数量",
+        "minimum": 1
+      },
+      "orientation": {
+        "type": "string",
+        "enum": ["landscape", "portrait", "squarish"],
+        "description": "图片方向：landscape(横向)、portrait(纵向)、squarish(方形)，不指定则不限"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "延迟反馈：'5分钟后'、'30秒后'、'明天09:00' 或 ISO。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": { "type": "string" },
+              "language": { "type": "string" },
+              "timezone": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：延迟反馈时间。仅控制反馈时间，不延迟执行。如超时则先反馈进行中状态。"
+      }
+    },
+    "required": ["query", "count"],
+    "additionalProperties": true
+  },
+  "timeoutMs": 180000,
+  "meta": {
+    "realWorldAction": "下载图片",
+    "responseStyle": "纯文本",
+    "responseExample": "{ success: true, data: { files: [{path: 'E:/.../img.jpg', path_markdown: '![...](...)'}], zip_path: 'E:/.../images.zip' } }"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "failedSteps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": { "type": "integer" },
+          "aiName": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "required": ["index", "reason"]
+      }
+    },
+    "summary": { "type": "string" }
+  },
+  "required": ["success"],
+  "additionalProperties": true
+}

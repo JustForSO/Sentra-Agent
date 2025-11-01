@@ -1,0 +1,4 @@
+{
+  "zh": "使用与约束说明：\n1) 工具调用记录由外部系统生成与插入，你仅可理解与引用，禁止伪造。\n2) 优先复用已有可用结果，避免重复调用；对时效性强的结果（时间、天气、状态变更）需谨慎。\n3) 回答依据优先级：最新工具结果 > 已有可复用结果 > 高确信度知识 > 工具不可用时谨慎输出并声明不确定。\n4) 禁止无依据猜测；引用工具结果时说明来源，摘要可简化但不得篡改。\n5) 输出 <sentra-tools> 时，仅输出一个块，禁止使用 Markdown 代码块围栏、禁止附加解释文字。",
+  "en": "Usage & constraints:\n1) Call records are inserted by the system; you may reference them but must not fabricate.\n2) Prefer reusing existing valid results; beware of time-sensitive data (time, weather, state).\n3) Answer priority: latest tool result > reusable prior result > high-confidence knowledge > cautious output when tools unavailable.\n4) No baseless guesses; when citing tool results, state the source; summarize but do not alter.\n5) When outputting <sentra-tools>, output exactly one block, no markdown fences, no extra text."
+}

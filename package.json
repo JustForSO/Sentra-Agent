@@ -1,0 +1,46 @@
+{
+  "name": "langchain-agent-framework",
+  "version": "1.0.0",
+  "description": "A LangChain agent framework for OpenAI compatible API calls",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node test/smart-agent-test.js",
+    "test:root": "node 1.js",
+    "test:legacy": "node src/test.js"
+  },
+  "dependencies": {
+    "@microsoft/recognizers-text-date-time": "^1.3.2",
+    "@microsoft/recognizers-text-suite": "^1.3.1",
+    "@langchain/core": "^0.2.0",
+    "@langchain/openai": "^0.2.0",
+    "chalk": "^5.6.2",
+    "chrono-node": "^2.6.3",
+    "chrono-node-zh": "^1.0.1",
+    "commander": "^12.0.0",
+    "dotenv": "^16.4.0",
+    "image-size": "^2.0.2",
+    "ioredis": "^5.8.0",
+    "langchain": "^0.2.0",
+    "luxon": "^3.4.4",
+    "natural": "^6.5.0",
+    "segment": "^0.1.3",
+    "sentra-mcp": "./sentra-mcp",
+    "sentra-prompts": "./sentra-prompts",
+    "sentra-rag": "./sentra-rag",
+    "tiktoken": "^1.0.10"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [
+    "langchain",
+    "agent",
+    "openai",
+    "cli",
+    "nodejs"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

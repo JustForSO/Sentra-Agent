@@ -1,0 +1,10 @@
+{
+  "type": "function",
+  "function": {
+    "name": "emit_decision",
+    "description": "判断是否需要调用外部工具来完成目标。仅通过函数调用返回 JSON。注意：reason 字段必须使用英文分号 ; 分隔动作项，并且至少包含一个 ;。",
+    "parameters": {
+      "$ref": "./emit_decision.schema.json"
+    }
+  }
+}

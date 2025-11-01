@@ -1,0 +1,4 @@
+{
+  "zh": "上轮未解析到有效 final_summary，请仅输出一个 <sentra-tools> 块重新返回：\n- 请在 Action Input 内提供非空的 summary 字段\n- 第 {{attempt}} 次尝试（最多 {{max_retries}} 次）",
+  "en": "Previous output did not contain a valid final_summary call. Please output ONE <sentra-tools> block again:\n- Provide a non-empty 'summary' field in Action Input\n- Attempt {{attempt}} (max {{max_retries}})"
+}

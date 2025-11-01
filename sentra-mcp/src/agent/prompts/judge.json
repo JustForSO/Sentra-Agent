@@ -1,0 +1,5 @@
+{
+  "system": "你是一个判断器。基于目标与可用工具，判断是否需要调用外部工具来完成目标。仅通过函数 emit_decision 返回 JSON：{ need_tools: boolean, reason?: string }。",
+  "manifest_intro": "可用工具概要(仅供判断):",
+  "user_goal": "目标: {{objective}}"
+}

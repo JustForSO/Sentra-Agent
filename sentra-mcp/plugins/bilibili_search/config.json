@@ -1,0 +1,31 @@
+{
+  "name": "bilibili_search",
+  "description": "搜索 B 站视频并下载到本地，返回本地绝对路径与 Markdown 形式路径。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "keyword": { "type": "string", "description": "搜索关键词（视频标题/关键字）" },
+      "pick": { "type": "string", "enum": ["first", "random"], "description": "选择第一条或随机一条，默认 first" },
+      
+      "schedule": {
+        "oneOf": [
+          { "type": "string", "description": "延迟反馈：'5分钟后'、'30秒后'、'明天09:00' 或 ISO。" },
+          { "type": "object", "properties": {
+              "when": { "type": "string" },
+              "language": { "type": "string" },
+              "timezone": { "type": "string" }
+            }, "additionalProperties": true }
+        ],
+        "description": "仅控制反馈时间，不延迟执行。如超时则先反馈进行中状态。"
+      }
+    },
+    "required": ["keyword"],
+    "additionalProperties": true
+  },
+  "timeoutMs": 180000,
+  "meta": {
+    "realWorldAction": "下载视频",
+    "responseStyle": "纯文本",
+    "responseExample": "{ success: true, data: { path: 'E:/.../video.mp4', path_markdown: '![video.mp4](E:/.../video.mp4)', bvid: 'BV...', url: 'https://www.bilibili.com/video/BV...' } }"
+  }
+}

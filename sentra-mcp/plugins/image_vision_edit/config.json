@@ -1,0 +1,59 @@
+{
+  "name": "image_vision_edit",
+  "description": "基于英文提示对一张或多张图片进行编辑或生成相关内容。输入包含图片（在线链接或本地绝对路径）与英文 prompt。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "images": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "description": "图片链接（http/https）或本地绝对路径，支持多个"
+      },
+      "prompt": {
+        "type": "string",
+        "description": "英文描述的编辑/生成指令（必须为英文）"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "images",
+      "prompt"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 120000,
+  "meta": {
+    "realWorldAction": "图像编辑",
+    "responseStyle": "纯文本",
+    "responseExample": "Here is an example: ![image](https://example.com/edited.png)"
+  }
+}

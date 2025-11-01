@@ -1,0 +1,58 @@
+{
+  "name": "document_read",
+  "description": "读取并解析各种文档和代码文件，包括 DOCX、PDF、XLSX、CSV、TXT、JSON、XML、Markdown、HTML、Python、JavaScript、TypeScript、Go、Java、C/C++ 等。支持在线链接（http/https）或本地绝对路径。自动检测编码（UTF-8、GBK 等）并转换为纯文本。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "description": "Array of complete file URLs (http/https) or complete absolute local file paths (e.g., C:/Documents/file.docx). Supports documents (.docx, .pdf, .xlsx, .xls, .csv, .txt, .json, .xml, .md, .html) and code files (.py, .js, .ts, .jsx, .tsx, .go, .java, .c, .cpp, .h, .php, .rb, .swift, .kt, .rs, .vue, .sh, .sql, .yaml, .yml). Partial paths, relative paths, or filename-only references are not permitted."
+      },
+      "encoding": {
+        "type": "string",
+        "description": "Optional: Text encoding for text/code files. Auto-detected if not specified. Examples: 'utf8', 'gbk', 'gb2312', 'shift_jis'. Only needed when auto-detection fails."
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "files"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 60000,
+  "meta": {
+    "realWorldAction": "解析文档内容",
+    "responseStyle": "纯文本",
+    "responseExample": "文档内容：标题...\n第一段...\n第二段..."
+  }
+}

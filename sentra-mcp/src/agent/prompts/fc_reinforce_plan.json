@@ -1,0 +1,4 @@
+{
+  "zh": "上轮输出无效（未解析到有效步骤或全部被过滤）。请重新输出：\n- 允许工具列表：{{allowed_list}}\n- 多样化约束：避免重复上轮失败的工具与策略，必要时加入信息收集/授权/诊断等前置步骤（必须包含 draftArgs）。\n- 计划质量：每步仅一个工具，明确 nextStep；无合适工具可输出空计划。\n- 这是第 {{attempt}} 次尝试（最多 {{max_retries}} 次）",
+  "en": "Previous output was invalid (no valid steps parsed or all filtered). Please re-output:\n- Allowed tools: {{allowed_list}}\n- Diversification: avoid repeating previously failed tools/strategies; add info/authorization/diagnostics steps when necessary (must include draftArgs).\n- Plan quality: one tool per step, clear nextStep; if none fits, output an empty plan.\n- This is attempt {{attempt}} (max {{max_retries}})"
+}

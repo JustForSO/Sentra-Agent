@@ -1,0 +1,114 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Python Dependencies
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+.env.python
+pip-log.txt
+pip-delete-this-directory.txt
+.installed.cfg
+*.egg
+*.egg-info/
+dist-info/
+.eggs/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Cache
+.cache/
+cache/
+.npm
+.eslintcache
+.node_repl_history
+
+# Build Output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output
+
+# Temporary Files
+temp/
+tmp/
+*.tmp
+*.temp
+.temp
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Neo4j
+data/neo4j/
+*.neo4j
+
+# Redis
+dump.rdb
+appendonly.aof
+
+# Artifacts & Storage
+artifacts/
+storage/
+uploads/
+downloads/
+
+# PM2
+.pm2/
+pm2.log
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup Files
+*.backup
+*.bak
+*.old
+
+# Project Specific
+test/1.txt.backup
+*.private
+*_private.*

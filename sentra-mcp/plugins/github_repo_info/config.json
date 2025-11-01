@@ -1,0 +1,113 @@
+{
+  "name": "github_repo_info",
+  "description": "查询 GitHub 仓库的详细信息（基础信息、最近提交、贡献者、开放的 Issues 与 PR、分支等）",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "repoUrl": {
+        "type": "string",
+        "description": "GitHub 仓库 URL 或 'owner/repo'，例如：https://github.com/username/repo 或 username/repo"
+      },
+      "max_commits": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 5,
+        "description": "返回的最近提交数量上限（1-50，默认5）"
+      },
+      "max_contributors": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 5,
+        "description": "返回的主要贡献者数量上限（1-50，默认5）"
+      },
+      "max_tags": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 10,
+        "description": "返回的标签数量上限（1-50，默认10）"
+      },
+      "readme_preview_chars": {
+        "type": "integer",
+        "minimum": 50,
+        "maximum": 5000,
+        "default": 400,
+        "description": "README 预览截取的字符数（50-5000，默认400）"
+      },
+      "include_languages": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含语言统计（/languages）"
+      },
+      "include_topics": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含仓库话题（/topics）"
+      },
+      "include_releases": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含最新发布信息（/releases/latest，失败回退 /releases?per_page=1）"
+      },
+      "include_tags": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含标签（/tags）"
+      },
+      "include_readme_preview": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含 README 文本预览（/readme，raw）"
+      },
+      "include_community_profile": {
+        "type": "boolean",
+        "default": false,
+        "description": "是否包含社区健康信息（/community/profile）"
+      },
+      "include_stats": {
+        "type": "object",
+        "properties": {
+          "commit_activity": { "type": "boolean", "default": false, "description": "是否包含提交活跃度（/stats/commit_activity，可能返回 202）" }
+        },
+        "additionalProperties": false,
+        "description": "可选的统计项开关"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": ["repoUrl"],
+    "additionalProperties": true
+  },
+  "timeoutMs": 90000,
+  "meta": {
+    "realWorldAction": "调用 GitHub API 查询仓库信息",
+    "responseStyle": "结构化 JSON（中文键）"
+  }
+}

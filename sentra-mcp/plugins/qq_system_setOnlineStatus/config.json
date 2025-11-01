@@ -1,0 +1,60 @@
+{
+  "name": "qq_system_setOnlineStatus",
+  "description": "QQ 平台：设置当前账号的在线状态（仅修改自己的状态）。status/ext_status/battery_status 三项均需提供，可参考常见映射组合。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "integer",
+        "description": "基础在线状态码（如 10 在线、30 离开、40 隐身、50 忙碌、60 Q我吧、70 勿扰 等）"
+      },
+      "ext_status": {
+        "type": "integer",
+        "description": "扩展状态码（如 听歌中=1028、今日天气=1030 等，为 0 则不附加扩展）"
+      },
+      "battery_status": {
+        "type": "integer",
+        "description": "电量状态（通常 0）"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "status",
+      "ext_status",
+      "battery_status"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 20000,
+  "meta": {
+    "realWorldAction": "设置在线状态（仅修改当前账号）",
+    "responseStyle": "自然语言（简洁）",
+    "responseExample": "已设置在线状态"
+  }
+}

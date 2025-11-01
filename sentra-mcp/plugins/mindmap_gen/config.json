@@ -1,0 +1,77 @@
+{
+  "name": "mindmap_gen",
+  "description": "Generate a detailed mind map from structured prompt data. Accepts comprehensive information including central topic, main branches, sub-branches, relationships, and styling preferences. Returns both markdown representation and optionally renders a high-quality PNG image via Puppeteer",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string"
+      },
+      "width": {
+        "type": "integer",
+        "minimum": 400,
+        "default": 2400
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 300,
+        "default": 1600
+      },
+      "style": {
+        "type": "string",
+        "default": "default"
+      },
+      "render": {
+        "type": "boolean",
+        "default": true
+      },
+      "waitTime": {
+        "type": "integer",
+        "minimum": 1000,
+        "default": 8000
+      },
+      "filename": {
+        "type": "string",
+        "description": "输出文件名（仅文件名，不含目录）。保存目录固定为 artifacts/。建议包含时间戳以避免重名，例如：topic_1696231234567.png。插件不会自动追加时间戳，需调用方提供。"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "prompt",
+      "filename"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 90000,
+  "meta": {
+    "realWorldAction": "绘制思维导图",
+    "responseStyle": "markdown结合自然语言",
+    "responseExample": "![思维导图](E:/sentra-agent/sentra-mcp/artifacts/topic_1696231234567.png)"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "name": "sentra",
+  "description": "动态提示词测试配置",
+  "version": "{{app_version}}",
+  
+  "systemPrompt": "你是{{name}}，一个智能AI助手。\n\n# 当前时间信息\n- 时间：{{time}}（{{time_context}}）\n- 日期：{{date}}（{{weekday}}）\n- 季节：{{season}}\n- 农历：{{lunar_date}}\n- 生肖：{{zodiac}}\n- 星座：{{constellation}}\n\n# 节日信息\n{{holiday}}\n{{next_holiday}}\n\n# 时间统计\n- 今天是今年第 {{day_of_year}} 天\n- 本周是今年第 {{week_of_year}} 周\n- 当前是 {{quarter}}\n- 本月共 {{days_in_month}} 天\n- 距离周末还有 {{days_until_weekend}} 天\n- 今年进度：{{year_progress}}\n- 本月进度：{{month_progress}}\n- 今天进度：{{day_progress}}\n\n# 系统信息\n- 平台：{{system_info}}\n- Node版本：{{node_version}}\n- 主机：{{hostname}}\n- CPU核心：20\n- 时区：{{timezone}}\n- 会话ID：{{uuid}}\n\n{{custom_message}}",
+  
+  "timeInfo": {
+    "current": {
+      "time": "{{time}}",
+      "date": "{{date}}",
+      "weekday": "{{weekday}}",
+      "context": "{{time_context}}",
+      "greeting": "{{greeting}}",
+      "iso": "{{iso_time}}",
+      "timestamp": "{{timestamp}}"
+    },
+    "calendar": {
+      "year": "{{year}}",
+      "month": "{{month}}",
+      "day": "{{day}}",
+      "season": "{{season}}",
+      "quarter": "{{quarter}}",
+      "weekOfYear": "{{week_of_year}}",
+      "dayOfYear": "{{day_of_year}}",
+      "dayOfWeek": "{{day_of_week}}"
+    },
+    "lunar": {
+      "date": "{{lunar_date}}",
+      "zodiac": "{{zodiac}}",
+      "ganzi": "{{ganzi}}",
+      "constellation": "{{constellation}}",
+      "jieqi": "{{jieqi}}"
+    },
+    "relative": {
+      "yesterday": "{{yesterday}}",
+      "today": "{{date}}",
+      "tomorrow": "{{tomorrow}}",
+      "lastMonth": "{{last_month}}",
+      "thisMonth": "{{month}}月",
+      "nextMonth": "{{next_month}}"
+    }
+  },
+  
+  "holidays": {
+    "current": "{{holiday}}",
+    "next": "{{next_holiday}}",
+    "isWorkday": "{{is_workday}}",
+    "isWeekend": "{{is_weekend}}",
+    "isWorkingHours": "{{is_working_hours}}"
+  },
+  
+  "progress": {
+    "day": "{{day_progress}}",
+    "month": "{{month_progress}}",
+    "year": "{{year_progress}}",
+    "remainingDaysInMonth": "{{remaining_days_month}}",
+    "remainingDaysInYear": "{{remaining_days_year}}",
+    "daysUntilWeekend": "{{days_until_weekend}}",
+    "daysUntilYearEnd": "{{days_until_year_end}}"
+  },
+  
+  "system": {
+    "info": "{{system_info}}",
+    "node": "{{node_version}}",
+    "platform": "{{platform}}",
+    "hostname": "{{hostname}}",
+    "username": "{{username}}",
+    "cpu": "20",
+    "gpu": "5070 ti",
+    "memory": {
+      "total": "63.76 GB",
+      "free": "25.80 GB"
+    }
+  },
+  
+  "generated": {
+    "uuid": "{{uuid}}",
+    "randomString": "{{random_string}}",
+    "randomInt": "{{random_int}}",
+    "randomFloat": "{{random_float}}"
+  },
+  
+  "formats": {
+    "dateFormats": {
+      "ymd": "{{date_ymd}}",
+      "dmy": "{{date_dmy}}",
+      "mdy": "{{date_mdy}}",
+      "chinese": "{{date}}"
+    },
+    "timeFormats": {
+      "24h": "{{time_24}}",
+      "12h": "{{time_12}}",
+      "full": "{{datetime}}"
+    }
+  },
+  
+  "examples": [
+    {
+      "scenario": "时间问候",
+      "prompt": "{{time_context}}好！现在是 {{time}}，{{greeting}}！"
+    },
+    {
+      "scenario": "日期信息",
+      "prompt": "今天是 {{date}}（{{weekday}}），农历 {{lunar_date}}，生肖{{zodiac}}。"
+    },
+    {
+      "scenario": "节日提醒",
+      "prompt": "{{holiday}}\n{{next_holiday}}"
+    },
+    {
+      "scenario": "进度报告",
+      "prompt": "今年已过 {{year_progress}}，本月已过 {{month_progress}}，今天已过 {{day_progress}}。"
+    },
+    {
+      "scenario": "工作状态",
+      "prompt": "当前{'是' if {{is_working_hours}} else '不是'}工作时间，{'是' if {{is_workday}} else '不是'}工作日。"
+    },
+    {
+      "scenario": "时间计算",
+      "prompt": "昨天是{{yesterday}}，明天是{{tomorrow}}，距离周末还有{{days_until_weekend}}天。"
+    },
+    {
+      "scenario": "系统信息",
+      "prompt": "运行在 {{platform}} 平台，Node {{node_version}}，主机 {{hostname}}。"
+    },
+    {
+      "scenario": "完整上下文",
+      "prompt": "现在是{{year}}年{{season}}的{{time_context}}{{time}}，今年第{{week_of_year}}周，{{weekday}}。{{holiday}}距离年底还有{{days_until_year_end}}天，今年进度{{year_progress}}。"
+    }
+  ]
+}

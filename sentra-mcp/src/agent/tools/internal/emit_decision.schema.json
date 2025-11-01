@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "need_tools": { "type": "boolean" },
+    "reason": { "type": "string", "pattern": ".*;.*" }
+  },
+  "required": ["need_tools", "reason"],
+  "additionalProperties": true
+}

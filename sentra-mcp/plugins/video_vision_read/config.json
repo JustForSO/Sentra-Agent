@@ -1,0 +1,59 @@
+{
+  "name": "video_vision_read",
+  "description": "读取并分析一个或多个视频。支持视频在线链接（http/https）或本地绝对路径；结合文本提示进行视频内容识别并返回分析结果。支持常见视频格式包括 MP4、MOV、AVI、WebM、MKV 等。",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "videos": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "description": "Array of complete video URLs (http/https) or complete absolute local file paths (e.g., C:/full/path/to/video.mp4). Partial paths, relative paths, or filename-only references are not permitted."
+      },
+      "prompt": {
+        "type": "string",
+        "description": "Instruction or question for the videos. For example: 'Describe what happens in this video', 'Extract text from this video', 'What actions are performed in this video?'"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": {
+                "type": "string",
+                "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串"
+              },
+              "language": {
+                "type": "string",
+                "description": "语言标识，例如 zh|en（默认 zh）"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA 时区名称，例如 Asia/Shanghai"
+              }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": [
+      "videos",
+      "prompt"
+    ],
+    "additionalProperties": true
+  },
+  "timeoutMs": 180000,
+  "meta": {
+    "realWorldAction": "识别视频内容",
+    "responseStyle": "纯文本",
+    "responseExample": "视频中包含：一个人在跑步，背景是公园，时长约30秒..."
+  }
+}

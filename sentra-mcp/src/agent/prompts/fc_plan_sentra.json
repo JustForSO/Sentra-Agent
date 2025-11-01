@@ -1,0 +1,4 @@
+{
+  "zh": "产出计划：请仅输出且仅输出一个工具调用块，使用 <sentra-tools> 包裹的 ReAct 行协议：\n<sentra-tools>\nAction: emit_plan\nAction Input: { \"plan\": { ... } }\n</sentra-tools>\n约束：\n- aiName 必须从允许列表中选择：{{allowed_list}}\n- steps 中每步仅包含一个工具，必须包含 draftArgs（只需必填）。\n{{require_line}}\n- 禁止使用 Markdown 代码块围栏；禁止输出多个 <sentra-tools> 块。\n- 仅输出上述块，不要输出任何解释性文字。\n计划结构示例（仅参考）：\n{{schema_hint}}",
+  "en": "Produce ONE AND ONLY ONE plan tool call under <sentra-tools> using ReAct line protocol:\n<sentra-tools>\nAction: emit_plan\nAction Input: { \"plan\": { ... } }\n</sentra-tools>\nConstraints:\n- aiName must be chosen from: {{allowed_list}}\n- Each step uses exactly one tool and includes draftArgs (required-only).\n{{require_line}}\n- Do NOT use Markdown code fences; do NOT output multiple <sentra-tools> blocks.\n- Output only the block, no extra text.\nPlan structure example:\n{{schema_hint}}"
+}

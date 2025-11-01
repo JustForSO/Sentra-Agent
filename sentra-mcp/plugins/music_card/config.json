@@ -1,0 +1,74 @@
+{
+  "name": "music_card",
+  "description": "根据关键词搜索网易云音乐并通过 WebSocket SDK 发送音乐卡片到 QQ 私聊或群聊",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "keyword": {
+        "type": "string",
+        "description": "音乐的标题或关键词, 可为 歌曲名 或 歌曲名+歌手名"
+      },
+      "provider": {
+        "type": "string",
+        "default": "163",
+        "description": "音乐卡片提供方，默认 163（网易云）"
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10,
+        "default": 6,
+        "description": "搜索结果返回数量上限（1-10）"
+      },
+      "random": {
+        "type": "boolean",
+        "default": true,
+        "description": "是否从结果中随机挑选一首"
+      },
+      "pick": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9,
+        "description": "在结果集中选择索引（当 random=false 时有效）"
+      },
+      "user_id": {
+        "type": "string",
+        "description": "私聊对象的 user_id（与 group_id 二选一，字符串）"
+      },
+      "group_id": {
+        "type": "string",
+        "description": "群聊对象的 group_id（与 user_id 二选一，字符串）"
+      },
+      "fallback_to_record": {
+        "type": "boolean",
+        "default": false,
+        "description": "发送音乐卡片失败时，尝试发送音频直链（需要可用的播放链接）"
+      },
+      "schedule": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "当用户需要延迟处理/延迟反馈时使用：例如 '5分钟后'、'30秒后'、'明天09:00'、ISO 字符串。"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "when": { "type": "string", "description": "时间表达：如 '5分钟后' / '明天09:00' / ISO 字符串" },
+              "language": { "type": "string", "description": "语言标识，例如 zh|en（默认 zh）" },
+              "timezone": { "type": "string", "description": "IANA 时区名称，例如 Asia/Shanghai" }
+            },
+            "additionalProperties": true
+          }
+        ],
+        "description": "可选：当用户需要延迟处理/延迟反馈时使用；仅控制反馈时间，不延迟执行。若到点未完成，将先反馈进行中状态。"
+      }
+    },
+    "required": ["keyword"],
+    "additionalProperties": true
+  },
+  "timeoutMs": 40000,
+  "meta": {
+    "realWorldAction": "搜索并发送音乐卡片",
+    "responseStyle": "结构化 JSON（中文键）"
+  }
+}
