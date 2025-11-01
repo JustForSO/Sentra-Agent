@@ -1,7 +1,7 @@
 {
-  "name": "langchain-agent-framework",
+  "name": "sentra-agent",
   "version": "1.0.0",
-  "description": "A LangChain agent framework for OpenAI compatible API calls",
+  "description": "Full-stack AI Agent solution with multi-platform adaptation, tool enhancement, knowledge graph, and anthropomorphic interaction",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -35,12 +35,19 @@
     "nodemon": "^3.0.0"
   },
   "keywords": [
-    "langchain",
-    "agent",
+    "ai-agent",
+    "chatbot",
+    "llm",
+    "neo4j",
+    "redis",
+    "qq",
+    "wechat",
     "openai",
-    "cli",
-    "nodejs"
+    "anthropomorphic",
+    "knowledge-graph",
+    "multimodal",
+    "rag"
   ],
-  "author": "Your Name",
+  "author": "Sentra Team",
   "license": "MIT"
 }
