@@ -45,9 +45,17 @@ export class OneBotReverseServer extends EventEmitter<{
   }
 
   start() {
-    this.wss = new WebSocketServer({ port: this.opts.port, path: this.opts.path });
+    // 显式指定监听0.0.0.0，确保IPv4和IPv6都可用
+    this.wss = new WebSocketServer({ 
+      port: this.opts.port, 
+      path: this.opts.path,
+      host: '0.0.0.0'  // 监听所有IPv4接口
+    });
     this.wss.on('listening', () => {
-      this.logger.info('Reverse WS listening on', `ws://0.0.0.0:${this.opts.port}${this.opts.path}`);
+      const addr = this.wss.address();
+      const actualHost = (addr && typeof addr === 'object') ? addr.address : '0.0.0.0';
+      const actualPort = (addr && typeof addr === 'object') ? addr.port : this.opts.port;
+      this.logger.info('Reverse WS listening on', `ws://${actualHost}:${actualPort}${this.opts.path}`);
       this.emit('listening');
     });
     this.wss.on('connection', (ws, req) => {

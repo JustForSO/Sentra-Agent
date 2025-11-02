@@ -24,7 +24,8 @@ if (fs.existsSync(testEnvPath)) {
 // ==================== 配置加载 ====================
 const CONFIG = {
   // WebSocket配置
-  wsUrl: process.env.WS_URL || 'ws://localhost:6702',
+  // 使用 127.0.0.1 而不是 localhost，避免IPv6解析问题
+  wsUrl: process.env.WS_URL || 'ws://127.0.0.1:6702',
   wsTimeout: parseInt(process.env.WS_TIMEOUT || '60000'),
   
   // AI API配置

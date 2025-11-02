@@ -115,10 +115,16 @@ export class MessageStream {
   start(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        this.wss = new WebSocketServer({ port: this.port });
+        this.wss = new WebSocketServer({ 
+          port: this.port,
+          host: '0.0.0.0'
+        });
 
         this.wss.on('listening', () => {
-          log.info(`消息流服务已启动，监听端口: ${this.port}`);
+          const addr = this.wss?.address();
+          const host = (addr && typeof addr === 'object') ? addr.address : '0.0.0.0';
+          const port = (addr && typeof addr === 'object') ? addr.port : this.port;
+          log.info(`消息流服务已启动，监听: ws://${host}:${port}`);
           resolve();
         });
 
