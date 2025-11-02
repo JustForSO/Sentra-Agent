@@ -1,12 +1,23 @@
 {
   "name": "bilibili_search",
-  "description": "搜索 B 站视频并下载到本地，返回本地绝对路径与 Markdown 形式路径。",
+  "description": "搜索 B 站视频并下载到本地，或以自定义音乐卡片形式发送到QQ群聊/私聊",
   "inputSchema": {
     "type": "object",
     "properties": {
       "keyword": { "type": "string", "description": "搜索关键词（视频标题/关键字）" },
       "pick": { "type": "string", "enum": ["first", "random"], "description": "选择第一条或随机一条，默认 first" },
-      
+      "user_id": {
+        "type": "string",
+        "description": "私聊对象的 user_id（与 group_id 二选一，发送音乐卡片时需提供）"
+      },
+      "group_id": {
+        "type": "string",
+        "description": "群聊对象的 group_id（与 user_id 二选一，发送音乐卡片时需提供）"
+      },
+      "send_as_music_card": {
+        "type": "boolean",
+        "description": "是否以自定义音乐卡片形式发送（覆盖env配置）"
+      },
       "schedule": {
         "oneOf": [
           { "type": "string", "description": "延迟反馈：'5分钟后'、'30秒后'、'明天09:00' 或 ISO。" },

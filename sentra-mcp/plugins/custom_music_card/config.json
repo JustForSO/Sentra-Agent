@@ -1,35 +1,24 @@
 {
-  "name": "music_card",
-  "description": "根据关键词搜索网易云音乐并通过 WebSocket SDK 发送音乐卡片到 QQ 私聊或群聊",
+  "name": "custom_music_card",
+  "description": "发送自定义伪装音乐卡片到QQ群聊或私聊，支持MP3/MP4等在线链接",
   "inputSchema": {
     "type": "object",
     "properties": {
-      "keyword": {
+      "media_url": {
         "type": "string",
-        "description": "音乐的标题或关键词, 可为 歌曲名 或 歌曲名+歌手名"
+        "description": "音频或视频的在线链接（必需，支持MP3/MP4等格式）"
       },
-      "provider": {
+      "title": {
         "type": "string",
-        "default": "163",
-        "description": "音乐卡片提供方，默认 163（网易云）"
+        "description": "卡片标题（必需）"
       },
-      "limit": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 10,
-        "default": 6,
-        "description": "搜索结果返回数量上限（1-10）"
+      "jump_url": {
+        "type": "string",
+        "description": "点击卡片时跳转的链接（可选，默认使用media_url）"
       },
-      "random": {
-        "type": "boolean",
-        "default": true,
-        "description": "是否从结果中随机挑选一首"
-      },
-      "pick": {
-        "type": "integer",
-        "minimum": 0,
-        "maximum": 9,
-        "description": "在结果集中选择索引（当 random=false 时有效）"
+      "cover_url": {
+        "type": "string",
+        "description": "封面图片链接（可选，优先使用此参数，其次使用env配置）"
       },
       "user_id": {
         "type": "string",
@@ -38,11 +27,6 @@
       "group_id": {
         "type": "string",
         "description": "群聊对象的 group_id（与 user_id 二选一，字符串）"
-      },
-      "fallback_to_record": {
-        "type": "boolean",
-        "default": false,
-        "description": "发送音乐卡片失败时，尝试发送音频直链（需要可用的播放链接）"
       },
       "schedule": {
         "oneOf": [
@@ -67,12 +51,12 @@
       { "required": ["user_id"], "not": { "required": ["group_id"] } },
       { "required": ["group_id"], "not": { "required": ["user_id"] } }
     ],
-    "required": ["keyword"],
+    "required": ["media_url", "title"],
     "additionalProperties": true
   },
-  "timeoutMs": 40000,
+  "timeoutMs": 15000,
   "meta": {
-    "realWorldAction": "搜索并发送音乐卡片",
+    "realWorldAction": "发送自定义音乐卡片",
     "responseStyle": "结构化 JSON（中文键）"
   }
 }

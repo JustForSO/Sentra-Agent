@@ -60,7 +60,7 @@ const CONFIG = {
   // 智能回复判断配置
   enableSmartReply: process.env.ENABLE_SMART_REPLY === 'true',
   judgeTimeout: parseInt(process.env.JUDGE_TIMEOUT || '5000'),
-  judgeModel: process.env.JUDGE_MODEL || 'gpt-4o-mini',
+  judgeModel: process.env.JUDGES_MODEL || 'gpt-4o-mini',
   
   // 回复欲望系统配置
   replyDesireThreshold: parseFloat(process.env.REPLY_DESIRE_THRESHOLD || '0.6'),

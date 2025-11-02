@@ -86,6 +86,7 @@ export default async function handler(args = {}, options = {}) {
   const user_id = args.user_id;
   const group_id = args.group_id;
   if (!user_id && !group_id) return { success: false, code: 'TARGET_REQUIRED', error: '必须提供 user_id（私聊）或 group_id（群聊）' };
+  if (user_id && group_id) return { success: false, code: 'TARGET_EXCLUSIVE', error: 'user_id 与 group_id 只能二选一' };
 
   const defaultLimit = toInt(penv.MUSIC163_SEARCH_LIMIT || process.env.MUSIC163_SEARCH_LIMIT) ?? 6;
   const limit = Math.max(1, Math.min(10, toInt(args.limit) ?? defaultLimit));

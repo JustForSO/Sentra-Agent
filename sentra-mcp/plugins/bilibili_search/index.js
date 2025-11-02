@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import logger from '../../src/logger/index.js';
 import { abs as toAbs } from '../../src/utils/path.js';
+import wsCall from '../../src/utils/ws_rpc.js';
 
 function toMarkdownPath(abs) {
   const label = path.basename(abs);
@@ -157,15 +158,77 @@ async function getPlayUrl({ bvid, cid, qn = 80, headers = {}, referer = '' }, ti
   return { urls: allUrls, size: Number.isFinite(size) && size > 0 ? size : 0 };
 }
 
+// 构建自定义音乐卡片 segments
+function buildCustomMusicCardSegments({ url, audio, title, image }) {
+  return [{
+    type: 'music',
+    data: {
+      type: 'custom',
+      url: String(url || ''),
+      audio: String(audio || ''),
+      title: String(title || ''),
+      image: String(image || '')
+    }
+  }];
+}
+
+// 通过 WebSocket 发送自定义音乐卡片
+async function sendMusicCardViaWS({ wsUrl, timeoutMs, pathList, argStyle }, target, segments) {
+  const { user_id, group_id } = target;
+  const filteredTarget = user_id ? { user_id } : { group_id };
+  const requestIdBase = `${(user_id ? 'private' : 'group')}-${Date.now()}`;
+
+  for (const path of pathList) {
+    const requestId = `${path}-${requestIdBase}`;
+    const args = (argStyle === 'pair')
+      ? (user_id ? [Number(user_id), segments] : [Number(group_id), segments])
+      : [{ ...filteredTarget, message: segments }];
+    try {
+      const resp = await wsCall({ url: wsUrl, path, args, requestId, timeoutMs });
+      return { ok: true, path, args, resp };
+    } catch (e) {
+      logger.warn?.('bilibili_search:ws_send_failed', { label: 'PLUGIN', path, error: String(e?.message || e) });
+    }
+  }
+  return { ok: false };
+}
+
 export default async function handler(args = {}, options = {}) {
   const keyword = String(args.keyword || '').trim();
   const pick = (args.pick || 'first');
-  // 仅使用环境变量控制封面下载
-  const wantCover = String((options?.pluginEnv?.BILI_SAVE_COVER || process.env.BILI_SAVE_COVER || 'true')).toLowerCase() !== 'false';
-
+  
   if (!keyword) return { success: false, code: 'INVALID', error: 'keyword is required' };
 
   const penv = options?.pluginEnv || {};
+  
+  // 音乐卡片发送功能配置
+  const sendAsMusicCard = typeof args.send_as_music_card === 'boolean' 
+    ? args.send_as_music_card 
+    : String(penv.BILI_SEND_AS_MUSIC_CARD || process.env.BILI_SEND_AS_MUSIC_CARD || 'false').toLowerCase() === 'true';
+  
+  const user_id = args.user_id;
+  const group_id = args.group_id;
+  
+  // 如果开启音乐卡片发送，必须提供目标
+  if (sendAsMusicCard) {
+    if (!user_id && !group_id) {
+      return { success: false, code: 'TARGET_REQUIRED', error: '发送音乐卡片时必须提供 user_id（私聊）或 group_id（群聊）' };
+    }
+    if (user_id && group_id) {
+      return { success: false, code: 'TARGET_EXCLUSIVE', error: 'user_id 与 group_id 只能二选一' };
+    }
+  }
+  
+  // WebSocket 配置（音乐卡片模式）
+  const wsUrl = String(penv.WS_SDK_URL || process.env.WS_SDK_URL || 'ws://127.0.0.1:6702');
+  const wsSendTimeoutMs = Math.max(1000, Number(penv.WS_SDK_TIMEOUT_MS || process.env.WS_SDK_TIMEOUT_MS || 15000));
+  const argStyle = String(penv.WS_SDK_ARG_STYLE || process.env.WS_SDK_ARG_STYLE || 'pair');
+  const pathMain = String(penv.WS_SDK_SEND_PATH || process.env.WS_SDK_SEND_PATH || '').trim();
+  const pathPri = String(penv.WS_SDK_SEND_PATH_PRIVATE || process.env.WS_SDK_SEND_PATH_PRIVATE || 'send.private');
+  const pathGrp = String(penv.WS_SDK_SEND_PATH_GROUP || process.env.WS_SDK_SEND_PATH_GROUP || 'send.group');
+  
+  // B站视频下载配置
+  const wantCover = String(penv.BILI_SAVE_COVER || process.env.BILI_SAVE_COVER || 'true').toLowerCase() !== 'false';
   const baseDir = String(penv.BILI_BASE_DIR || process.env.BILI_BASE_DIR || 'artifacts');
   const quality = Number(penv.BILI_QUALITY || process.env.BILI_QUALITY || 80);
   const maxDownloadMB = Number(penv.BILI_MAX_DOWNLOAD_MB || process.env.BILI_MAX_DOWNLOAD_MB || 65);
@@ -260,6 +323,41 @@ export default async function handler(args = {}, options = {}) {
       timestamp: new Date().toISOString(),
     };
 
+    // ==================== 音乐卡片发送模式 ====================
+    if (sendAsMusicCard) {
+      logger.info?.('bilibili_search:send_music_card', { label: 'PLUGIN', mode: 'music_card', user_id, group_id });
+      
+      // 构建自定义音乐卡片
+      const picUrl = pic.startsWith('//') ? `https:${pic}` : pic;
+      const segments = buildCustomMusicCardSegments({
+        url: urlVideoPage,           // 点击跳转到B站视频页
+        audio: playUrls[0] || '',    // 音频/视频播放链接
+        title: title || '未知标题',
+        image: picUrl || ''           // 封面图
+      });
+      
+      const pathList = [pathMain, (user_id ? pathPri : pathGrp)].filter((v, i, a) => !!v && a.indexOf(v) === i);
+      const sendRes = await sendMusicCardViaWS(
+        { wsUrl, timeoutMs: wsSendTimeoutMs, pathList, argStyle },
+        { user_id, group_id },
+        segments
+      );
+      
+      if (sendRes.ok) {
+        data.music_card_sent = true;
+        data.send_target = user_id ? '私聊' : '群聊';
+        data.send_to = user_id || group_id;
+        data.status = 'OK_MUSIC_CARD_SENT';
+        data.summary = `已成功发送B站视频"${title}"（${bvid}）的音乐卡片到${data.send_target}`;
+        logger.info?.('bilibili_search:send_music_card_success', { label: 'PLUGIN', target: data.send_target, to: data.send_to });
+        return { success: true, data };
+      } else {
+        logger.warn?.('bilibili_search:send_music_card_failed', { label: 'PLUGIN', reason: 'all_ws_paths_failed' });
+        return { success: false, code: 'SEND_FAILED', error: '发送音乐卡片失败（所有WebSocket路径均失败）' };
+      }
+    }
+
+    // ==================== 下载模式（默认） ====================
     // 如果探测到大小且超过阈值：不下载，仅返回链接
     if (Number.isFinite(sizeBytes) && sizeBytes > 0 && sizeBytes > maxBytes) {
       const sizeMB = +(sizeBytes / 1024 / 1024).toFixed(2);
