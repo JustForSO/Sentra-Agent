@@ -215,8 +215,6 @@ npm install
 npm run dev
 ```
 
-**文档**：[CONFIG_UI_GUIDE.md](CONFIG_UI_GUIDE.md)
-
 ---
 
 ## 快速开始
@@ -872,7 +870,7 @@ npm run pm2:logs
 
 ## 实际应用场景
 
-### 1. 企业客服机器人
+### 1. 客服bot
 
 - 智能回复策略：避免过度回复，提升用户体验
 - 用户画像系统：个性化服务
@@ -983,6 +981,7 @@ npm run pm2:logs --err
 - [PM2](https://pm2.keymetrics.io/) - Node.js 进程管理工具
 - [React95](https://react95.io/) - Windows 95 风格的 React 组件库
 - [FastAPI](https://fastapi.tiangolo.com/) - 现代化的 Python Web 框架
+...
 
 感谢所有为开源社区做出贡献的开发者！
 
