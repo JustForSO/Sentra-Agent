@@ -17,6 +17,7 @@ import { tokenCounter } from './src/token-counter.js';
 import path from 'path';
 import UserPersonaManager from './utils/userPersonaManager.js';
 import { createLogger } from './utils/logger.js';
+import { repairSentraResponse, shouldRepair } from './utils/formatRepair.js';
 
 const sdk = new SentraMcpSDK();
 await sdk.init();
@@ -110,6 +111,7 @@ const MAX_RESPONSE_RETRIES = parseInt(process.env.MAX_RESPONSE_RETRIES || '2');
 const MAX_RESPONSE_TOKENS = parseInt(process.env.MAX_RESPONSE_TOKENS || '260');
 const TOKEN_COUNT_MODEL = process.env.TOKEN_COUNT_MODEL || 'gpt-4o-mini';
 const ENABLE_STRICT_FORMAT_CHECK = (process.env.ENABLE_STRICT_FORMAT_CHECK || 'true') === 'true';
+const ENABLE_FORMAT_REPAIR = (process.env.ENABLE_FORMAT_REPAIR || 'true') === 'true';
 
 /**
  * 验证响应格式是否符合 Sentra XML 协议
@@ -184,23 +186,36 @@ async function chatWithRetry(conversations, modelOrOptions, groupId) {
       logger.debug(`[${groupId}] AI请求第${retries + 1}次尝试`);
       
       // 调用 AI（传递完整配置）
-      const response = await agent.chat(conversations, options);
+      let response = await agent.chat(conversations, options);
       
       // 格式验证
       if (ENABLE_STRICT_FORMAT_CHECK) {
         const formatCheck = validateResponseFormat(response);
         if (!formatCheck.valid) {
           logger.warn(`[${groupId}] 格式验证失败: ${formatCheck.reason}`);
-          
-          // 如果还有重试机会，直接重试
-          if (retries < MAX_RESPONSE_RETRIES) {
-            retries++;
-            logger.debug(`[${groupId}] 格式验证失败，直接重试（第${retries + 1}次）...`);
-            continue;
-          } else {
-            // 没有重试机会了，返回失败
-            logger.error(`[${groupId}] 格式验证失败-最终: 已达最大重试次数`);
-            return { response: null, retries, success: false, reason: formatCheck.reason };
+          let repairedOk = false;
+          if (ENABLE_FORMAT_REPAIR && typeof response === 'string' && response.trim()) {
+            try {
+              const repaired = await repairSentraResponse(response, { agent, model: process.env.REPAIR_AI_MODEL });
+              const repairedCheck = validateResponseFormat(repaired);
+              if (repairedCheck.valid) {
+                response = repaired;
+                repairedOk = true;
+                logger.success(`[${groupId}] 格式已自动修复`);
+              }
+            } catch (e) {
+              logger.warn(`[${groupId}] 格式修复失败: ${e.message}`);
+            }
+          }
+          if (!repairedOk) {
+            if (retries < MAX_RESPONSE_RETRIES) {
+              retries++;
+              logger.debug(`[${groupId}] 格式验证失败，直接重试（第${retries + 1}次）...`);
+              continue;
+            } else {
+              logger.error(`[${groupId}] 格式验证失败-最终: 已达最大重试次数`);
+              return { response: null, retries, success: false, reason: formatCheck.reason };
+            }
           }
         }
       }
@@ -544,6 +559,7 @@ async function handleOneMessage(msg, taskId) {
         currentUserContent = fullContext;
         
         conversations.push({ role: 'user', content: fullContext });
+  
         const result = await chatWithRetry(conversations, MAIN_AI_MODEL, groupId);
         
         if (!result.success) {
